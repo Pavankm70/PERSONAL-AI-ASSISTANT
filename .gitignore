@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+*/node_modules/
+.pnp
+.pnp.js
+.venv/
+*/.venv/
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.token
+
+# Build outputs
+dist/
+*/dist/
+build/
+*/build/
+*.egg-info/
+.pytest_cache/
+*/.pytest_cache/
+.coverage
+htmlcov/
+
+# Local database and storage
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+storage/
+uploads/
+*/uploads/
+
+# Logs & scratch
+*.log
+scratch/
+*/scratch/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

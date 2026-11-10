@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: aurelia-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: aurelia_user
+      POSTGRES_PASSWORD: aurelia_password
+      POSTGRES_DB: aurelia_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aurelia_user -d aurelia_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aurelia-backend
+    restart: always
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=postgresql+psycopg://aurelia_user:aurelia_password@postgres:5432/aurelia_db
+      - FRONTEND_URL=http://localhost:5173
+      - BACKEND_URL=http://localhost:8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aurelia-frontend
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
